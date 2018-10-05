@@ -265,7 +265,7 @@ Usando o Maven, é uma ferramenta de automação de compilação utilizada neste
 == Para Rodar o Aplicativo
 
 ----
-1 - Na pasta do projeto no Packege Explorer, navege até o arquivo Application (src/main/java) na raiz do pacote com.desafioapp
+1 - Na pasta do projeto no Packege Explorer, navege até o arquivo Application (src/main/java) na raiz do pacote com.desafioapp.app
 2 - Clique com o botão direito em cima do arquivo Application.java-> Rum as-> Java Application
 3 - O aplicativo iniciará e veja no console:
 

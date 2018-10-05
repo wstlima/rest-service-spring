@@ -12,7 +12,7 @@ import com.desafioapp.data.CSVToDataBaseH2;
 import com.desafioapp.exception.HandlerMappingFilterBadRequest;
 
 @SpringBootApplication
-public class Application {
+public class Application { 
 
     @Bean
     @Autowired
