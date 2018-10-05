@@ -242,7 +242,7 @@ http://localhost:8080/movies/{id} //HTTP DELETE
 
 == Distribuição e Gerenciamento
 
-Usando o Github para distribuição do projeo.
+Usando o Github para distribuição do projeto.
 
 Usando o Maven, é uma ferramenta de automação de compilação utilizada neste projeto para baixar as bibliotecas Java e seus plug-ins dinamicamente de um ou mais repositórios, como o Maven 2 Central Repository, e armazena-os em uma área de cache local.
 
