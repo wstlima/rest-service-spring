@@ -1,0 +1,309 @@
+---
+tags: [rest]
+projects: [spring-framework]
+---
+:spring_version: current
+:toc:
+:project_id: desafio-rest-service
+:spring_version: current
+:spring_boot_version: 1.3.0.M4
+:icons: font
+:source-highlighter: prettify
+
+
+== Descrição dos Recursos
+
+Essa solução fornece um serviço da Web API RESTful para possibilitar a leitura e manutenção da lista de indicados e vencedores da categoria Pior Filme do Golden Raspberry Awards.
+
+Detalhes dos recursos usados neste projeto:
+
+* Usando Spring Boot e o Tomcat 8 como contêiner do servlet incorporado.
+* Teste unitário conduzido pelo maven-surefire-plugin, maven-failsafe-plugin e rest-assured.
+* Um esforço para atender as práticas (HTTP Verbos) identificada no Nível 2 dentro do modelo de maturidade de Leonard Richardson.
+* O serviço irá trabalhar com JSON.
+* Cabeçalhos de controle de acesso na resposta HTTP e sem restrições de origem cruzada para evitar erros de CORS (Compartilhamento de Recursos de Origens Cruzadas), é um mecanismo que usa cabeçalhos HTTP adicionais para garantir permissão de acesso a recursos de um servidor diferente da origem do domínio.
+* Utilizando o padrão de projeto DTO (Data Transfer Object) - Em resumo superficial esse padrão de projeto utiliza um objeto simples para transferir dados de um local a outro na aplicação.
+* Utilizando o Banco de dados H2. O H2 é um banco de dados Java leve e de código aberto. Incorporado neste aplicativo. O banco de dados H2 pode ser configurado para ser executado como um banco de dados na memória, o que significa que os dados não persistirão no disco, assim a base de dados fica rodando na memória sem a necessidade de nenhuma instalação ou serviço de banco de dados externo, mas que também perde todos os dados e alterações realizadas neles ao finalizar a aplicação.
+* Carregamento automático dos dados contidos em arquivo CSV, em um processo iniciado junto com a aplicação.
+
+
+== Recursos Providos
+
+O projeto fornece e integra testes que aceitará solicitações para os métodos:
+
+HTTP GET em:
+
+----
+1. http://localhost:8080/movies/{year}
+2. http://localhost:8080/movies/yearsmoreonewinners
+3. http://localhost:8080/movies/studiosorderwinns
+4. http://localhost:8080/movies/awardsinterval
+----
+
+HTTP DELETE em:
+
+----
+1. http://localhost:8080/movies/{id}
+----
+
+No caso do endpoint inexistente o serviço responderá com uma representação JSON com uma mensagem de código padrão.
+
+Exemplo de resposta padrão no caso de endpoint inexistente:
+
+----
+{
+	"codreturn": "00400",
+	"timestamp": 1538677176588,
+	"status": "400",
+	"message": "Bad Request – A solicitação não pôde ser entendida pelo servidor devido à sintaxe malformada.",
+	"path": "http://localhost:8080/xpto"
+}
+----
+== Endpoins
+
+Obtém os vencedores, informando um ano.
+----
+http://localhost:8080/movies/{year}
+----
+
+Exemplo de resposta:
+
+[source,json]
+----
+{
+    "movies": [
+        {
+            "id": 194,
+            "year": "2017",
+            "title": "Baywatch",
+            "studios": [
+                {
+                    "name": "Paramount Pictures"
+                }
+            ],
+            "producers": [
+                {
+                    "name": "Ivan Reitman"
+                },
+                {
+                    "name": "Michael Berk"
+                },
+                {
+                    "name": "Douglas Schwartz"
+                },
+                {
+                    "name": "Gregory J. Bonann and Beau Flynn"
+                }
+            ],
+            "winner": false
+        }
+        
+    "returnStatus": {
+        "codreturn": "00200",
+        "timestamp": 1538763477531,
+        "status": "200",
+        "message": "OK –  Obtenção com sucesso do(s) dado(s).",
+        "path": "/movies/1999"
+    }        
+}
+----
+
+Obtém os anos que tiveram mais de um vencedor.
+----
+http://localhost:8080/movies/yearsmoreonewinners
+----
+
+Exemplo de resposta:
+
+[source,json]
+----
+{
+    "years": [
+        {
+            "year": "1986",
+            "winnerCount": 2
+        },
+        {
+            "year": "2015",
+            "winnerCount": 2
+        },
+        {
+            "year": "1990",
+            "winnerCount": 2
+        }
+    ],
+    "returnStatus": {
+        "codreturn": "00200",
+        "timestamp": 1538678413946,
+        "status": "200",
+        "message": "OK –  Obtenção com sucesso do(s) dado(s).",
+        "path": "/movies/yearsmoreonewinners"
+    }
+}
+----
+
+Obtém a lista de estúdios, ordenada pelo número de premiações.
+
+----
+http://localhost:8080/movies/studiosorderwinns
+----
+
+Exemplo de resposta:
+
+[source,json]
+----
+{
+    "studios": [
+        {
+            "name": "Paramount Pictures",
+            "winCount": 6
+        },
+        {
+            "name": "Columbia Pictures",
+            "winCount": 5
+        },
+        {
+            "name": "Warner Bros.",
+            "winCount": 5
+        },
+        {
+            "name": "20th Century Fox",
+            "winCount": 4
+        },
+        {
+            "name": "MGM",
+            "winCount": 3
+        },
+        {
+            "name": "Hollywood Pictures",
+            "winCount": 2
+        },
+        {
+            "name": "Universal Studios",
+            "winCount": 2
+        },
+        {
+            "name": "Summit Entertainment",
+            "winCount": 1
+        }
+    "returnStatus": {
+        "codreturn": "00200",
+        "timestamp": 1538763588718,
+        "status": "200",
+        "message": "OK –  Obtenção com sucesso do(s) dado(s).",
+        "path": "/movies/studiosorderwinns"
+    }        
+}
+----
+
+Obtém o produtor com maior intervalo entre dois prêmios, e o que obteve dois prêmios mais rápido.
+
+----
+http://localhost:8080/movies/awardsinterval
+----
+
+Exemplo de resposta:
+
+[source,json]
+----
+{
+    "min": [
+        {
+            "producer": "Wyck Godfrey, Stephenie Meyer and Karen Rosenfelt",
+            "interval": 1,
+            "previousWin": 2011,
+            "followingWin": 2012
+        }
+    ],
+    "max": [
+        {
+            "producer": "Bo Derek",
+            "interval": 6,
+            "previousWin": 1984,
+            "followingWin": 1990
+        }
+    ],
+    "returnStatus": {
+        "codreturn": "00200",
+        "timestamp": 1538679244773,
+        "status": "200",
+        "message": "OK –  Obtenção com sucesso do(s) dado(s).",
+        "path": "/movies/awardsinterval"
+    }
+}
+----
+
+Exclui um filme. Não permite excluir vencedores.
+
+----
+http://localhost:8080/movies/{id} //HTTP DELETE
+----
+
+
+== Distribuição e Gerenciamento
+
+Usando o Github para distribuição do projeo.
+
+Usando o Maven, é uma ferramenta de automação de compilação utilizada neste projeto para baixar as bibliotecas Java e seus plug-ins dinamicamente de um ou mais repositórios, como o Maven 2 Central Repository, e armazena-os em uma área de cache local.
+
+
+== Importando um Projeto Maven Existente no Eclipse
+
+[source,json]
+----
+
+1 - Abra o Eclipse
+2 - Clique em File > Import
+3 - Digite Maven na caixa de pesquisa em Selecione uma escrita, "Select an import source:"
+4 - Selecionar projetos Maven existentes "Existing Maven Projects"
+5 - Clique em Avançar "Next"
+6 - Clique em Navegar "Browse" e selecione a pasta que é a raiz do projeto Maven (que contém o arquivo pom.xml)
+7 - Clique em Avançar
+8 - Clique em Finish
+----
+
+== Para Rodar o Aplicativo
+[source,json]
+O método HTTP OPTIONS retorna cabeçalhos de controle de acesso na resposta, permitindo o compartilhamento de recursos de origem cruzada.
+
+----
+1 - Na pasta do projeto no Packege Explorer, navege até o arquivo Application (src/main/java) na raiz do pacote com.desafioapp
+2 - Clique com o botão direito em cima do arquivo Application.java-> Rum as-> Java Application
+3 - O aplicativo iniciará e veja no console:
+
+...
+.........................................................
+... LOAD DATA BEGIN ..................................
+.........................................................
+Path to CSV File C:\PROJETOS\JAVA\workspace\rest-service\target\classes\movielist.csv
+Connecting to H2 database...
+Creating tables in database...
+Created table in given database...
+Row Count: 197
+.........................................................
+... LOAD DATA FINISH .................................
+.........................................................
+...
+----
+
+== Testando
+O método HTTP OPTIONS retorna cabeçalhos de controle de acesso na resposta, permitindo o compartilhamento de recursos de origem cruzada.
+
+[source,json]
+----
+curl -i -X OPTIONS http://localhost:8080/greetings
+----
+
+[source,json]
+----
+HTTP/1.1 200 OK
+Server: Apache-Coyote/1.1
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, OPTIONS
+Access-Control-Max-Age: 3600
+Access-Control-Allow-Headers: x-requested-with
+X-Application-Context: application
+Allow: GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH
+Content-Length: 0
+Date: Fri, 05 Oct 2018 16:23:20 GMT
+----
