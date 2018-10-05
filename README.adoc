@@ -263,8 +263,6 @@ Usando o Maven, é uma ferramenta de automação de compilação utilizada neste
 ----
 
 == Para Rodar o Aplicativo
-[source,json]
-O método HTTP OPTIONS retorna cabeçalhos de controle de acesso na resposta, permitindo o compartilhamento de recursos de origem cruzada.
 
 ----
 1 - Na pasta do projeto no Packege Explorer, navege até o arquivo Application (src/main/java) na raiz do pacote com.desafioapp
