@@ -85,7 +85,8 @@ public class AppControllerIT {
         when().
                 get("/").
         then().
-                statusCode(HttpStatus.SC_BAD_REQUEST);               
+                statusCode(HttpStatus.SC_BAD_REQUEST).
+                body("codreturn", Matchers.containsString("00400"));                
     }	
 	
 	@Test
@@ -93,7 +94,8 @@ public class AppControllerIT {
         when().
                 get("/movies").
         then().
-                statusCode(HttpStatus.SC_BAD_REQUEST);               
+                statusCode(HttpStatus.SC_BAD_REQUEST).
+                body("codreturn", Matchers.containsString("00400"));                
     }	
 	
 	@Test
@@ -101,7 +103,8 @@ public class AppControllerIT {
         when().
                 get("/movies/xpto").
         then().
-                statusCode(HttpStatus.SC_BAD_REQUEST);               
+                statusCode(HttpStatus.SC_BAD_REQUEST).
+                body("codreturn", Matchers.containsString("00400"));               
     }	
 	
 	@Test
@@ -109,7 +112,8 @@ public class AppControllerIT {
         when().
                 get("/movies/xpto/xpto").
         then().
-                statusCode(HttpStatus.SC_BAD_REQUEST);               
+                statusCode(HttpStatus.SC_BAD_REQUEST).
+                body("codreturn", Matchers.containsString("00400"));               
     }		
 	
 	

@@ -1,7 +1,6 @@
 package com.desafioapp.exception;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.servlet.FilterChain;
@@ -21,8 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class HandlerMappingFilterBadRequest extends OncePerRequestFilter {
 	RequestMappingHandlerMapping requestMappingHandlerMapping;
 	private ReturnStatus returnStatus;
-	private static final Charset UTF_8 = Charset.forName("UTF-8");
-	private static final Charset ISO = Charset.forName("ISO-8859-1");
 
 	public HandlerMappingFilterBadRequest(RequestMappingHandlerMapping requestMappingHandlerMapping) {
 		this.requestMappingHandlerMapping = requestMappingHandlerMapping;
@@ -30,8 +27,7 @@ public class HandlerMappingFilterBadRequest extends OncePerRequestFilter {
 
 	public ReturnStatus badRequest(HttpServletRequest request )  {
 		this.returnStatus = new ReturnStatus("00400", request.getRequestURL().toString());
-		this.returnStatus.message = new String(this.returnStatus.message.getBytes(UTF_8), ISO); 
-		return returnStatus;
+		return this.returnStatus;
 	}
 
 	@Override
@@ -46,11 +42,11 @@ public class HandlerMappingFilterBadRequest extends OncePerRequestFilter {
 
 		try {
 			System.out.println(jsonInString);
+			hsr.setContentType("application/json;charset=UTF-8");
 			hsr.setStatus(400);
 			hsr.getWriter().write(responseToClient);
 			hsr.getWriter().flush();
 			hsr.getWriter().close();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
