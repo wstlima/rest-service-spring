@@ -1,6 +1,6 @@
 ---
 tags: [rest]
-projects: [spring-framework]
+projects: [spring-framework], [spring-boot]
 ---
 :spring_version: current
 :toc:
